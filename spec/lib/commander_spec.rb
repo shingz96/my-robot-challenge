@@ -25,7 +25,8 @@ RSpec.describe Commander do
   end
 
   describe '#run' do
-    let(:commander) { described_class.new(robot) }
+    let(:commander) { described_class.new(robot, output: output) }
+    let(:output) { StringIO.new }
 
     subject(:run_command) { commander.run(command) }
 
@@ -78,7 +79,8 @@ RSpec.describe Commander do
       let(:command) { 'JUMP' }
 
       it 'prints an error message' do
-        expect { run_command }.to output("Invalid command: #{command}\n").to_stdout
+        expect(output).to receive(:puts).with("Invalid command: #{command}")
+        run_command
       end
     end
 
@@ -91,7 +93,8 @@ RSpec.describe Commander do
       end
 
       it 'prints an error message' do
-        expect { run_command }.to output("Unexpected error: #{error_message}\n").to_stdout
+        expect(output).to receive(:puts).with("Unexpected error: #{error_message}")
+        run_command
       end
     end
   end

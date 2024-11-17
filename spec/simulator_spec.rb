@@ -28,13 +28,34 @@ RSpec.describe Simulator do
     context 'when the command is EXIT' do
       let(:commands) { "EXIT" }
 
-      it 'exits the simulator' do
-        expect(output).to receive(:puts).with("Robot Simulator started. Enter commands (Ctrl-C or EXIT to exit):")
-        expect(output).to receive(:puts).with("Commands: PLACE X,Y,F | MOVE | LEFT | RIGHT | REPORT")
-        expect(output).to receive(:puts).with( "-" * 50)
+      context 'when the input is from terminal' do
+        let(:input) { STDIN }
 
-        expect(output).to receive(:puts).with("\nSimulator terminated.")
-        simulator.run
+        before do
+          allow(STDIN).to receive(:gets) { commands }
+        end
+
+        it 'exits the simulator' do
+          expect(output).to receive(:puts).with("Robot Simulator started. Enter commands (Ctrl-C or EXIT to exit):")
+          expect(output).to receive(:puts).with("Commands: PLACE X,Y,F | MOVE | LEFT | RIGHT | REPORT")
+          expect(output).to receive(:puts).with( "-" * 50)
+
+          expect(output).to receive(:puts).with("\nSimulator terminated.")
+          simulator.run
+        end
+      end
+
+      context 'when the input is from file' do
+        let(:input) { StringIO.new(commands) }
+
+        it 'exits the simulator' do
+          expect(output).to receive(:puts).with("Robot Simulator started. Enter commands (Ctrl-C or EXIT to exit):")
+          expect(output).to receive(:puts).with("Commands: PLACE X,Y,F | MOVE | LEFT | RIGHT | REPORT")
+          expect(output).to receive(:puts).with( "-" * 50)
+
+          expect(output).not_to receive(:puts).with("\nSimulator terminated.")
+          simulator.run
+        end
       end
     end
 
