@@ -1,8 +1,9 @@
 class Commander
-  def initialize(robot)
+  def initialize(robot, output: STDOUT)
     raise ArgumentError, 'Robot must be a Robot object' unless robot.is_a?(Robot)
 
     @robot = robot
+    @output = output
   end
 
   def run(command)
@@ -20,11 +21,11 @@ class Commander
     when 'RIGHT'
       @robot.right
     when 'REPORT'
-      puts @robot.report
+      @output.puts @robot.report
     else
-      puts "Invalid command: #{command}"
+      @output.puts "Invalid command: #{command}"
     end
   rescue => e
-    puts "Unexpected error: #{e.message}"
+    @output.puts "Unexpected error: #{e.message}"
   end
 end
