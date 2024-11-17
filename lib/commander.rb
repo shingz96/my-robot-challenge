@@ -1,3 +1,5 @@
+require 'logger'
+
 class Commander
   def initialize(robot, output: STDOUT)
     raise ArgumentError, 'Robot must be a Robot object' unless robot.is_a?(Robot)
@@ -26,6 +28,15 @@ class Commander
       @output.puts "Invalid command: #{command}"
     end
   rescue => e
+    log_error(e)
     @output.puts "Unexpected error: #{e.message}"
+  end
+
+  private
+
+  def log_error(error)
+    logger = Logger.new('logs/commander.log')
+    logger.error(error.message)
+    logger.error(error.backtrace.join("\n"))
   end
 end
