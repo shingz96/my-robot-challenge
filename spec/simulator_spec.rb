@@ -29,10 +29,11 @@ RSpec.describe Simulator do
       let(:commands) { "EXIT" }
 
       context 'when the input is from terminal' do
-        let(:input) { STDIN }
+        let(:input) { double('input') }
 
         before do
-          allow(STDIN).to receive(:gets) { commands }
+          allow(input).to receive(:isatty) { true }
+          allow(input).to receive(:gets) { commands }
         end
 
         it 'exits the simulator' do
