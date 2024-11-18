@@ -14,7 +14,7 @@ class Commander
 
     case action
     when 'PLACE'
-      x, y, direction = parts[1].split(',')
+      x, y, direction = parts[1]&.split(',')
       @robot.place(x.to_i, y.to_i, direction)
     when 'MOVE'
       @robot.move

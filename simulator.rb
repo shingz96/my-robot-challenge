@@ -15,6 +15,7 @@ class Simulator
 
     if file_input?
       process_file
+      show_exit_message
     else
       process_interactive
     end
@@ -40,7 +41,8 @@ class Simulator
   end
 
   def show_exit_message
-    @output.puts "\nSimulator terminated."
+    @output.puts "-" * 50
+    @output.puts "Robot Simulator ended."
   end
 
   def file_input?

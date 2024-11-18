@@ -37,6 +37,16 @@ RSpec.describe Commander do
         expect(robot).to receive(:place).with(0, 0, 'NORTH')
         run_command
       end
+
+      context 'when no values passed' do
+        let(:command) { 'PLACE' }
+
+        it 'does not place the robot' do
+          expect(robot).to receive(:place).with(0, 0, nil).and_call_original
+          run_command
+          expect(robot.placed?).to be_falsey
+        end
+      end
     end
 
     context 'when the command is MOVE' do

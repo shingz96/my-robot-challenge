@@ -28,6 +28,18 @@ RSpec.describe Simulator do
     context 'when the command is EXIT' do
       let(:commands) { "EXIT" }
 
+      shared_examples 'exits the simulator' do
+        it 'exits the simulator' do
+          expect(output).to receive(:puts).with("Robot Simulator started. Enter commands (Ctrl-C or EXIT to exit):")
+          expect(output).to receive(:puts).with("Commands: PLACE X,Y,F | MOVE | LEFT | RIGHT | REPORT")
+          expect(output).to receive(:puts).with( "-" * 50)
+
+          expect(output).to receive(:puts).with( "-" * 50)
+          expect(output).to receive(:puts).with("Robot Simulator ended.")
+          simulator.run
+        end
+      end
+
       context 'when the input is from terminal' do
         let(:input) { double('input') }
 
@@ -36,27 +48,13 @@ RSpec.describe Simulator do
           allow(input).to receive(:gets) { commands }
         end
 
-        it 'exits the simulator' do
-          expect(output).to receive(:puts).with("Robot Simulator started. Enter commands (Ctrl-C or EXIT to exit):")
-          expect(output).to receive(:puts).with("Commands: PLACE X,Y,F | MOVE | LEFT | RIGHT | REPORT")
-          expect(output).to receive(:puts).with( "-" * 50)
-
-          expect(output).to receive(:puts).with("\nSimulator terminated.")
-          simulator.run
-        end
+        it_behaves_like 'exits the simulator'
       end
 
       context 'when the input is from file' do
         let(:input) { StringIO.new(commands) }
 
-        it 'exits the simulator' do
-          expect(output).to receive(:puts).with("Robot Simulator started. Enter commands (Ctrl-C or EXIT to exit):")
-          expect(output).to receive(:puts).with("Commands: PLACE X,Y,F | MOVE | LEFT | RIGHT | REPORT")
-          expect(output).to receive(:puts).with( "-" * 50)
-
-          expect(output).not_to receive(:puts).with("\nSimulator terminated.")
-          simulator.run
-        end
+        it_behaves_like 'exits the simulator'
       end
     end
 
@@ -67,6 +65,9 @@ RSpec.describe Simulator do
         expect(output).to receive(:puts).with( "-" * 50)
 
         expect(output).to receive(:puts).with(report_message)
+
+        expect(output).to receive(:puts).with( "-" * 50)
+        expect(output).to receive(:puts).with("Robot Simulator ended.")
         simulator.run
       end
     end
