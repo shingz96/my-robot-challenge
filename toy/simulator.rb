@@ -1,14 +1,14 @@
 require_relative '../lib/toy/robot'
 require_relative '../lib/toy/table'
 require_relative '../lib/toy/commander'
-require_relative '../lib/toy/logibility'
+require_relative '../lib/toy/logable'
 require 'dotenv'
 
 Dotenv.load
 
 module Toy
   class Simulator
-    include Toy::Logibility
+    include Toy::Logable
 
     def initialize(input = STDIN, output = STDOUT)
       @input = input

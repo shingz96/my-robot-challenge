@@ -9,7 +9,7 @@ RSpec.describe Toy::Commands::Place do
     let(:table) { Toy::Table.new(5, 5) }
     let(:robot) { Toy::Robot.new }
     let(:command) { 'PLACE 0,0,NORTH' }
-    let(:output) { double('output') }
+    let(:output) { Toy::Formatter::Output.new }
 
     subject(:place_command) { described_class.new(robot: robot, table: table, command: command, output: output).execute }
 
@@ -25,22 +25,16 @@ RSpec.describe Toy::Commands::Place do
     context 'when the position is invalid' do
       let(:command) { 'PLACE 6,6,NORTH' }
 
-      it 'does not place the robot on the table' do
-        place_command
-
-        expect(robot.placed?).to eq(false)
-        expect(robot.position).to eq(nil)
+      it 'raise invalid position error' do
+        expect { place_command }.to raise_error(Toy::Errors::InvalidPositionError)
       end
     end
 
     context 'when the command is invalid' do
       let(:command) { 'PLACE 0,0,LEFT' }
 
-      it 'does not place the robot on the table' do
-        place_command
-
-        expect(robot.placed?).to eq(false)
-        expect(robot.position).to eq(nil)
+      it 'raise invalid direction error' do
+        expect { place_command }.to raise_error(Toy::Errors::InvalidPositionArgumentError)
       end
     end
   end

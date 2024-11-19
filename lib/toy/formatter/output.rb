@@ -10,6 +10,7 @@ module Toy
       end
 
       def print_error(error)
+        @output.puts error.message
       end
     end
   end

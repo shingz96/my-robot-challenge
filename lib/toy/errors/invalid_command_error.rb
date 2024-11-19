@@ -1,6 +1,8 @@
+require_relative 'custom_error'
+
 module Toy
   module Errors
-    class InvalidCommandError < StandardError
+    class InvalidCommandError < CustomError
       def initialize(command)
         super
         @command = command

@@ -1,7 +1,7 @@
 require 'logger'
 
 module Toy
-  module Logibility
+  module Logable
     def logger_name
       raise NotImplementedError, 'You must implement logger_name'
     end

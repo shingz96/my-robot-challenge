@@ -19,7 +19,7 @@ RSpec.describe Toy::Position do
       let(:x) { 'x' }
 
       it 'raises an ArgumentError' do
-        expect { position }.to raise_error(ArgumentError, 'Invalid position')
+        expect { position }.to raise_error(Toy::Errors::InvalidPositionArgumentError)
       end
     end
 
@@ -27,7 +27,7 @@ RSpec.describe Toy::Position do
       let(:y) { 'y' }
 
       it 'raises an ArgumentError' do
-        expect { position }.to raise_error(ArgumentError, 'Invalid position')
+        expect { position }.to raise_error(Toy::Errors::InvalidPositionArgumentError)
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe Toy::Position do
       let(:direction) { 'INVALID' }
 
       it 'raises an ArgumentError' do
-        expect { position }.to raise_error(ArgumentError, 'Invalid direction')
+        expect { position }.to raise_error(Toy::Errors::InvalidPositionArgumentError)
       end
     end
   end

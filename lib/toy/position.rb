@@ -1,4 +1,5 @@
 require_relative 'formatter/printable'
+require_relative 'errors/invalid_position_argument_error'
 
 module Toy
   class Position
@@ -9,8 +10,8 @@ module Toy
     include Toy::Formatter::Printable
 
     def initialize(x:, y:, direction:)
-      raise ArgumentError, 'Invalid position' unless x.is_a?(Integer) && y.is_a?(Integer)
-      raise ArgumentError, 'Invalid direction' unless DIRECTIONS.include?(direction)
+      raise Toy::Errors::InvalidPositionArgumentError.new(x: x, y: y) unless x.is_a?(Integer) && y.is_a?(Integer)
+      raise Toy::Errors::InvalidPositionArgumentError.new(direction: direction) unless DIRECTIONS.include?(direction)
 
       @x = x
       @y = y
