@@ -1,10 +1,12 @@
 require_relative '../lib/toy/robot'
 require_relative '../lib/toy/table'
 require_relative '../lib/toy/commander'
-require 'logger'
+require_relative '../lib/toy/logibility'
 
 module Toy
   class Simulator
+    include Toy::Logibility
+
     def initialize(input = STDIN, output = STDOUT)
       @input = input
       @output = output
@@ -32,10 +34,8 @@ module Toy
 
     private
 
-    def log_error(error)
-      logger = Logger.new('logs/simulator.log')
-      logger.error(error.message)
-      logger.error(error.backtrace.join("\n"))
+    def logger_name
+      'simulator'
     end
 
     def show_welcome_messages
