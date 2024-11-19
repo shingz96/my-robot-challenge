@@ -6,8 +6,7 @@ require_relative '../../../lib/toy/commander'
 RSpec.describe Toy::Commander do
   let(:table) { Toy::Table.new(5, 5) }
   let(:robot) { Toy::Robot.new }
-  let(:output) { StringIO.new }
-  let(:commander) { described_class.new(robot: robot, table: table, output: output) }
+  let(:commander) { described_class.new(robot: robot, table: table) }
 
   describe '#initialize' do
     it 'creates a Commander object with the given robot and table' do
@@ -18,13 +17,15 @@ RSpec.describe Toy::Commander do
   end
 
   describe '#run' do
-    subject(:run_command) { commander.run(command) }
+    subject(:run_command) { commander.run(command, output) }
+
+    let(:output) { Toy::Formatter::Output.new }
 
     shared_examples 'execute command correctly' do
       it "execute command correctly" do
         expect(command_class).to receive(:new).with(robot: robot, table: table, command: command, output: output).and_call_original
         expect_any_instance_of(command_class).to receive(:execute)
-        expect(run_command).to eq(true)
+        run_command
       end
     end
 
@@ -39,7 +40,8 @@ RSpec.describe Toy::Commander do
 
         it 'does not execute any command' do
           expect(command_class).not_to receive(:new)
-          expect(run_command).to eq(false)
+          expect(output).to receive(:print_error).with(Toy::Errors::InvalidCommandError)
+          run_command
         end
       end
     end
@@ -76,7 +78,8 @@ RSpec.describe Toy::Commander do
       let(:command) { 'JUMP' }
 
       it 'does not execute any command' do
-        expect(run_command).to eq(false)
+        expect(output).to receive(:print_error).with(Toy::Errors::InvalidCommandError)
+        run_command
       end
     end
   end

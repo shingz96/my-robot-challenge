@@ -2,6 +2,9 @@ require_relative '../lib/toy/robot'
 require_relative '../lib/toy/table'
 require_relative '../lib/toy/commander'
 require_relative '../lib/toy/logibility'
+require 'dotenv'
+
+Dotenv.load
 
 module Toy
   class Simulator
@@ -11,9 +14,10 @@ module Toy
       @input = input
       @output = output
 
-      table = Toy::Table.new(5, 5)
-      robot = Toy::Robot.new
-      @commander = Toy::Commander.new(robot: robot, table: table, output: @output)
+      @output_formatter = Toy::Formatter::Output.new(output)
+      @robot = Toy::Robot.new
+      @table = Toy::Table.new(ENV['TABLE_WIDTH'].to_i, ENV['TABLE_HEIGHT'].to_i)
+      @commander = Toy::Commander.new(robot: @robot, table: @table)
     end
 
     def run
@@ -57,7 +61,7 @@ module Toy
       while (command = @input.gets&.chomp.to_s.upcase)
         raise Interrupt if command == 'EXIT'
 
-        @commander.run(command)
+        process_single_command(command)
       end
     end
 
@@ -76,8 +80,12 @@ module Toy
     end
 
     def process_buffer(command_buffer)
-      command_buffer.each { |command| @commander.run(command) }
+      command_buffer.each { |command| process_single_command(command) }
       command_buffer.clear
+    end
+
+    def process_single_command(command)
+      @commander.run(command, @output_formatter)
     end
   end
 end

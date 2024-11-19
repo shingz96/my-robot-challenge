@@ -1,8 +1,12 @@
+require_relative 'formatter/printable'
+
 module Toy
   class Position
     DIRECTIONS = %w[NORTH EAST SOUTH WEST].freeze
 
     attr_reader :x, :y, :direction
+
+    include Toy::Formatter::Printable
 
     def initialize(x:, y:, direction:)
       raise ArgumentError, 'Invalid position' unless x.is_a?(Integer) && y.is_a?(Integer)
@@ -41,6 +45,10 @@ module Toy
 
     def ==(other)
       x == other.x && y == other.y && direction == other.direction
+    end
+
+    def pretty_print
+      "#{@x},#{@y},#{@direction}"
     end
   end
 end

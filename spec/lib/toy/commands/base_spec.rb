@@ -2,8 +2,8 @@ require 'rspec'
 require_relative '../../../../lib/toy/commands/base'
 
 RSpec.describe Toy::Commands::Base do
-  it 'prepended with Toy::Commands::Executability' do
-    expect(described_class.ancestors.first).to eq(Toy::Commands::Executability)
+  it 'prepended with Toy::Commands::Executable' do
+    expect(described_class.ancestors.first).to eq(Toy::Commands::Executable)
   end
 
   describe '#execute' do

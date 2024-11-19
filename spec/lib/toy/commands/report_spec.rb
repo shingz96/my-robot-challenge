@@ -3,13 +3,14 @@ require_relative '../../../../lib/toy/commands/report'
 require_relative '../../../../lib/toy/robot'
 require_relative '../../../../lib/toy/table'
 require_relative '../../../../lib/toy/position'
+require_relative '../../../../lib/toy/formatter/output'
 
 RSpec.describe Toy::Commands::Report do
   describe '#execute' do
     let(:table) { Toy::Table.new(5, 5) }
     let(:robot) { Toy::Robot.new }
     let(:command) { 'REPORT' }
-    let(:output) { StringIO.new }
+    let(:output) { Toy::Formatter::Output.new }
 
     subject(:report_command) { described_class.new(robot: robot, table: table, command: command, output: output).execute }
 
@@ -27,7 +28,7 @@ RSpec.describe Toy::Commands::Report do
       end
 
       it "reports robot's position" do
-        expect(output).to receive(:puts).with("#{initial_position.x},#{initial_position.y},#{initial_position.direction}")
+        expect(output).to receive(:print).with(robot.position)
         report_command
       end
     end

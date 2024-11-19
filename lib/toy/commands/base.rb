@@ -1,9 +1,9 @@
-require_relative 'executability'
+require_relative 'executable'
 
 module Toy
   module Commands
     class Base
-      prepend Toy::Commands::Executability
+      prepend Toy::Commands::Executable
 
       def initialize(command:, robot:, table:, output:)
         @command = command

@@ -1,6 +1,6 @@
 module Toy
   module Commands
-    module Executability
+    module Executable
       def execute
         return unless match_data
 

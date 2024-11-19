@@ -6,7 +6,7 @@ module Toy
       def execute
         return unless @robot.placed?
 
-        @output.puts "#{@robot.position.x},#{@robot.position.y},#{@robot.position.direction}"
+        @output.print @robot.position
       end
 
       def self.command_regex

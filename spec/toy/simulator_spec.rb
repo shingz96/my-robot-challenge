@@ -17,11 +17,11 @@ RSpec.describe Toy::Simulator do
     end
 
     it 'pass the given commands to Commander' do
-      expect_any_instance_of(Toy::Commander).to receive(:run).with('PLACE 0,0,NORTH')
-      expect_any_instance_of(Toy::Commander).to receive(:run).with('MOVE')
-      expect_any_instance_of(Toy::Commander).to receive(:run).with('LEFT')
-      expect_any_instance_of(Toy::Commander).to receive(:run).with('RIGHT')
-      expect_any_instance_of(Toy::Commander).to receive(:run).with('REPORT')
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('PLACE 0,0,NORTH', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('MOVE', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('LEFT', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('RIGHT', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('REPORT', instance_of(Toy::Formatter::Output))
       simulator.run
     end
 

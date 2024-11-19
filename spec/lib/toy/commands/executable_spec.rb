@@ -1,10 +1,10 @@
 require 'rspec'
-require_relative '../../../../lib/toy/commands/executability'
+require_relative '../../../../lib/toy/commands/executable'
 
-RSpec.describe Toy::Commands::Executability do
+RSpec.describe Toy::Commands::Executable do
   let(:dummy_class) do
     Class.new do
-      prepend Toy::Commands::Executability
+      prepend Toy::Commands::Executable
 
       def initialize(command)
         @command = command
