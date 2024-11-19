@@ -1,7 +1,7 @@
 require 'rspec'
-require_relative '../../lib/table'
+require_relative '../../../lib/toy/table'
 
-RSpec.describe Table do
+RSpec.describe Toy::Table do
   describe '#initialize' do
     let(:width) { 10 }
     let(:height) { 5 }
@@ -9,7 +9,7 @@ RSpec.describe Table do
     subject(:table) { described_class.new(width, height) }
 
     it 'creates a table with the specified width and height' do
-      expect(table).to be_a(Table)
+      expect(table).to be_a(Toy::Table)
       expect(table.instance_variable_get(:@width)).to eq(width)
       expect(table.instance_variable_get(:@height)).to eq(height)
     end

@@ -1,7 +1,7 @@
 require 'rspec'
-require_relative '../simulator'
+require_relative '../../toy/simulator'
 
-RSpec.describe Simulator do
+RSpec.describe Toy::Simulator do
   describe '#run' do
     let(:simulator) { described_class.new(input, output) }
     let(:input) { StringIO.new(commands) }
@@ -17,11 +17,11 @@ RSpec.describe Simulator do
     end
 
     it 'pass the given commands to Commander' do
-      expect_any_instance_of(Commander).to receive(:run).with('PLACE 0,0,NORTH')
-      expect_any_instance_of(Commander).to receive(:run).with('MOVE')
-      expect_any_instance_of(Commander).to receive(:run).with('LEFT')
-      expect_any_instance_of(Commander).to receive(:run).with('RIGHT')
-      expect_any_instance_of(Commander).to receive(:run).with('REPORT')
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('PLACE 0,0,NORTH')
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('MOVE')
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('LEFT')
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('RIGHT')
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('REPORT')
       simulator.run
     end
 
