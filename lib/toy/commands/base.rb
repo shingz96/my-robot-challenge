@@ -16,10 +16,6 @@ module Toy
         raise NotImplementedError, 'You must implement the execute method'
       end
 
-      def logger_name
-        'commands'
-      end
-
       def self.command_regex
         raise NotImplementedError, 'You must implement the command_regex method'
       end

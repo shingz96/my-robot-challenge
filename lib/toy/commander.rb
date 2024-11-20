@@ -31,6 +31,10 @@ module Toy
 
     private
 
+    def logger_name
+      "commander"
+    end
+
     def command_classes
       [
         Commands::Place,

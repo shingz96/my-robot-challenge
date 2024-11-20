@@ -2,6 +2,8 @@ require_relative '../lib/toy/robot'
 require_relative '../lib/toy/table'
 require_relative '../lib/toy/commander'
 require_relative '../lib/toy/logable'
+require_relative '../lib/toy/formatter/input'
+require_relative '../lib/toy/formatter/output'
 require 'dotenv'
 
 Dotenv.load
@@ -10,25 +12,31 @@ module Toy
   class Simulator
     include Toy::Logable
 
-    def initialize(input = STDIN, output = STDOUT)
+    def initialize(input = STDIN, output = STDOUT, robot, table)
       @input = input
       @output = output
+      @command_buffer = []
 
+      @input_formatter = Toy::Formatter::Input.new(input)
       @output_formatter = Toy::Formatter::Output.new(output)
-      @robot = Toy::Robot.new
-      @table = Toy::Table.new(ENV['TABLE_WIDTH'].to_i, ENV['TABLE_HEIGHT'].to_i)
-      @commander = Toy::Commander.new(robot: @robot, table: @table)
+      @commander = Toy::Commander.new(robot: robot, table: table)
     end
 
     def run
       show_welcome_messages
 
-      if file_input?
-        process_file
-        show_exit_message
-      else
-        process_interactive
+      @input_formatter.iterator.each do |command|
+        break if command == 'EXIT'
+
+        buffer_size = @input_formatter.file_input? ? ENV['MAX_FILE_BUFFER'].to_i : 1
+
+        @command_buffer << command
+        process_buffer if @command_buffer.size >= buffer_size
       end
+
+      process_buffer unless @command_buffer.empty?
+
+      show_exit_message
     rescue Interrupt
       show_exit_message
     rescue => e
@@ -53,35 +61,9 @@ module Toy
       @output.puts "Robot Simulator ended."
     end
 
-    def file_input?
-      !@input.isatty rescue true
-    end
-
-    def process_interactive
-      while (command = @input.gets&.chomp.to_s.upcase)
-        raise Interrupt if command == 'EXIT'
-
-        process_single_command(command)
-      end
-    end
-
-    def process_file
-      command_buffer = []
-
-      @input.each_line do |line|
-        command = line.strip.upcase
-        break if command == 'EXIT'
-
-        command_buffer << command
-        process_buffer(command_buffer) if command_buffer.size >= 1000
-      end
-
-      process_buffer(command_buffer) unless command_buffer.empty?
-    end
-
-    def process_buffer(command_buffer)
-      command_buffer.each { |command| process_single_command(command) }
-      command_buffer.clear
+    def process_buffer
+      @command_buffer.each { |command| process_single_command(command) }
+      @command_buffer.clear
     end
 
     def process_single_command(command)
@@ -90,4 +72,8 @@ module Toy
   end
 end
 
-Toy::Simulator.new.run if $PROGRAM_NAME == __FILE__
+if $PROGRAM_NAME == __FILE__
+  robot = Toy::Robot.new
+  table = Toy::Table.new(ENV['TABLE_WIDTH'].to_i, ENV['TABLE_HEIGHT'].to_i)
+  Toy::Simulator.new(STDIN, STDOUT, robot, table).run
+end
