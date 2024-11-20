@@ -1,9 +1,11 @@
 require 'rspec'
-require_relative '../simulator'
+require_relative '../../toy/simulator'
 
-RSpec.describe Simulator do
+RSpec.describe Toy::Simulator do
   describe '#run' do
-    let(:simulator) { described_class.new(input, output) }
+    let(:simulator) { described_class.new(input, output, robot, table) }
+    let(:robot) { Toy::Robot.new }
+    let(:table) { Toy::Table.new(5, 5) }
     let(:input) { StringIO.new(commands) }
     let(:output) { StringIO.new }
     let(:commands) do
@@ -17,11 +19,11 @@ RSpec.describe Simulator do
     end
 
     it 'pass the given commands to Commander' do
-      expect_any_instance_of(Commander).to receive(:run).with('PLACE 0,0,NORTH')
-      expect_any_instance_of(Commander).to receive(:run).with('MOVE')
-      expect_any_instance_of(Commander).to receive(:run).with('LEFT')
-      expect_any_instance_of(Commander).to receive(:run).with('RIGHT')
-      expect_any_instance_of(Commander).to receive(:run).with('REPORT')
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('PLACE 0,0,NORTH', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('MOVE', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('LEFT', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('RIGHT', instance_of(Toy::Formatter::Output))
+      expect_any_instance_of(Toy::Commander).to receive(:run).with('REPORT', instance_of(Toy::Formatter::Output))
       simulator.run
     end
 
