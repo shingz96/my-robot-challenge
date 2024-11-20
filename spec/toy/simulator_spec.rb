@@ -3,7 +3,9 @@ require_relative '../../toy/simulator'
 
 RSpec.describe Toy::Simulator do
   describe '#run' do
-    let(:simulator) { described_class.new(input, output) }
+    let(:simulator) { described_class.new(input, output, robot, table) }
+    let(:robot) { Toy::Robot.new }
+    let(:table) { Toy::Table.new(5, 5) }
     let(:input) { StringIO.new(commands) }
     let(:output) { StringIO.new }
     let(:commands) do
